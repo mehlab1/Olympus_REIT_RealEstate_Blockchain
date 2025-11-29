@@ -1,392 +1,394 @@
-# 🏛 Olympus REIT – Backend API Documentation
+# 🏛 Olympus REIT - Decentralized Real Estate Investment Platform
 
-A decentralized **Real Estate Investment Token (REIT)** backend built on Ethereum Sepolia using:
+A complete decentralized application (dApp) for real estate investment on the Ethereum blockchain. Built with React, Node.js, Express, and Ethers.js, featuring a modern glassmorphism UI with smooth animations.
 
-* Solidity smart contract (`OlympusREIT`)
-* Node.js + Express backend
-* Ethers.js v6
-* MetaMask / Wallet frontends
-
-This backend exposes **REST endpoints** that allow the frontend to:
-
-* Display REIT stats
-* Show investor balances
-* Generate transaction data for MetaMask (non-custodial)
-* Call admin-only functions (server-signed)
+![Olympus REIT](https://img.shields.io/badge/Blockchain-Ethereum-blue)
+![Network](https://img.shields.io/badge/Network-Sepolia-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-# 📡 Base URL
+## 📋 Table of Contents
 
-When running locally:
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Installation & Setup](#-installation--setup)
+- [Environment Configuration](#-environment-configuration)
+- [Running the Application](#-running-the-application)
+- [How to Use](#-how-to-use)
+- [API Documentation](#-api-documentation)
+- [Smart Contract](#-smart-contract)
+- [Troubleshooting](#-troubleshooting)
+
+---
+
+## ✨ Features
+
+### Frontend
+- 🎨 **Modern UI** - Glassmorphism design with gradient backgrounds
+- 🎭 **Smooth Animations** - Powered by Framer Motion
+- 📱 **Responsive Design** - Works on all devices
+- 🔔 **Toast Notifications** - Beautiful feedback using react-hot-toast
+- 💡 **User Guide** - Built-in help modal for new users
+- 🎯 **Real-time Data** - Live contract stats and user balances
+
+### Backend
+- 🔒 **Secure Admin Routes** - Protected with API key authentication
+- ⚡ **Rate Limiting Protection** - Intelligent caching to avoid RPC limits
+- 🛡️ **Error Handling** - Comprehensive error messages
+- 📊 **RESTful API** - Clean and well-documented endpoints
+
+### Blockchain
+- 💰 **Buy/Sell Shares** - Trade real estate tokens
+- 💵 **Earn Dividends** - Receive rent distributions
+- 📈 **Dynamic Pricing** - Admin-controlled share price updates
+- 🏦 **Vault Management** - Secure ETH storage
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- **React** 18.3.1
+- **Ethers.js** 6.13.0
+- **Framer Motion** - Animations
+- **React Hot Toast** - Notifications
+- **React Router** 6.23.0
+- **React Icons** - UI icons
+- **Axios** - HTTP client
+
+### Backend
+- **Node.js** with Express
+- **Ethers.js** 6.15.0
+- **CORS** enabled
+- **dotenv** for environment variables
+
+### Blockchain
+- **Ethereum Sepolia Testnet**
+- **Solidity Smart Contract**
+- **MetaMask** integration
+
+---
+
+## 📁 Project Structure
 
 ```
-http://localhost:4000
+olympus_REIT/
+├── frontend/                 # React frontend application
+│   ├── public/              # Static assets
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   │   ├── Button.js
+│   │   │   ├── Card.js
+│   │   │   ├── Input.js
+│   │   │   ├── Navbar.js
+│   │   │   └── Guide.js
+│   │   ├── context/         # React Context for state
+│   │   │   └── AppContext.js
+│   │   ├── pages/           # Main application pages
+│   │   │   ├── Dashboard.js
+│   │   │   └── Admin.js
+│   │   ├── services/        # API integration
+│   │   │   └── api.js
+│   │   ├── App.js
+│   │   └── index.js
+│   ├── package.json
+│   └── .env                 # Frontend environment variables
+├── index.js                 # Backend server
+├── OlympusREIT.abi.json    # Smart contract ABI
+├── package.json             # Backend dependencies
+├── .env                     # Backend environment variables
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-# ⚙️ Environment Variables
+## 📋 Prerequisites
 
+Before you begin, ensure you have:
+
+- **Node.js** (v16 or higher)
+- **npm** (v7 or higher)
+- **MetaMask** browser extension
+- **Sepolia ETH** (for testing) - Get from [Sepolia Faucet](https://sepoliafaucet.com/)
+- **Git** (for cloning the repository)
+
+---
+
+## 🚀 Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/masab009/olympus_REIT.git
+cd olympus_REIT
 ```
+
+### 2. Install Backend Dependencies
+
+```bash
+npm install
+```
+
+### 3. Install Frontend Dependencies
+
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+---
+
+## ⚙️ Environment Configuration
+
+### Backend Configuration
+
+Create a `.env` file in the **root directory**:
+
+```env
 PORT=4000
-
-# Ethereum RPC (Alchemy / Infura)
-RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
-
-# Deployed REIT contract
+RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
 CONTRACT_ADDRESS=0xcf93041051CF9b58764D25D1ba8A38B77FAc5B85
+ADMIN_PRIVATE_KEY=your_private_key_here
+ADMIN_API_KEY=supersecret89213jh12h1bnASD
+```
 
-# Owner wallet (server signs admin tx)
-ADMIN_PRIVATE_KEY=0xabc123...
+**Important:**
+- Get a free Infura API key from [infura.io](https://infura.io/)
+- `ADMIN_PRIVATE_KEY` should be the private key of the wallet that deployed the contract
+- Never commit your `.env` file to version control
 
-# Admin API key (protects admin routes)
-ADMIN_API_KEY=supersecretkey
+### Frontend Configuration
+
+Create a `.env` file in the **frontend** directory:
+
+```env
+REACT_APP_API_URL=http://localhost:4000
+REACT_APP_ADMIN_API_KEY=supersecret89213jh12h1bnASD
 ```
 
 ---
 
-# 🧱 Contract Summary
+## 🏃 Running the Application
 
-Contract address (Sepolia):
+### 1. Start the Backend Server
 
+In the root directory:
+
+```bash
+npm start
 ```
-0xcf93041051CF9b58764D25D1ba8A38B77FAc5B85
+
+The backend will run on `http://localhost:4000`
+
+### 2. Start the Frontend Development Server
+
+In a new terminal, navigate to the frontend directory:
+
+```bash
+cd frontend
+npm start
 ```
 
-### Contract exposes:
-
-### User (non-admin)
-
-* `buyShares(uint256 amountTokens)`
-* `sellShares(uint256 amountTokens)`
-* `claimRent()`
-* `sharePrice()`
-* `balanceOf(address)`
-* `withdrawableRentOf(address)`
-* `totalSupply()`
-* `maxSupply()`
-* `propertyAddress()`
-
-### Admin (server-signed)
-
-* `adjustSharePrice(uint256 newPriceWei)`
-* `injectLiquidity()` (payable)
-* `distributeRent()` (payable)
-* `emergencyWithdraw(uint256 amountWei)`
+The frontend will open automatically at `http://localhost:3000`
 
 ---
 
-# 🚀 API Endpoints
+## 📖 How to Use
 
-## 1. Health Check
+### For Investors
 
-```
-GET /health
-```
+#### 1. **Connect Your Wallet**
+- Click the "Connect Wallet" button
+- Approve the MetaMask connection
+- Ensure you're on the Sepolia network
 
-Returns the chain and block info.
+#### 2. **View Dashboard**
+- See current share price
+- Check total vault balance
+- View circulating supply
+
+#### 3. **Buy Shares**
+- Enter the amount of tokens you want to buy
+- Click "Get Quote" to see the cost
+- Click "Buy Now" and confirm in MetaMask
+- Wait for transaction confirmation
+
+#### 4. **Sell Shares**
+- Enter the amount of tokens to sell
+- Click "Sell Shares"
+- Confirm in MetaMask
+
+#### 5. **Claim Rent (Dividends)**
+- Check your "Withdrawable Rent" balance
+- Click "Claim Rent" when available
+- Confirm in MetaMask to receive ETH
+
+### For Admins
+
+Access the Admin Panel by clicking "Admin" in the navigation.
+
+#### Available Admin Actions:
+
+1. **Distribute Rent** - Send ETH dividends to all token holders
+2. **Inject Liquidity** - Add ETH to the vault without minting shares
+3. **Adjust Share Price** - Update the NAV per share
+4. **Emergency Withdraw** - Withdraw funds to owner wallet
+
+**Note:** All admin actions require the server to have the `ADMIN_PRIVATE_KEY` configured.
 
 ---
 
-# 📊 PUBLIC (NO WALLET REQUIRED)
+## 📡 API Documentation
 
-## 2. REIT Dashboard Info
+### Public Endpoints
 
+#### Get Contract Info
 ```
 GET /public/info
 ```
+Returns contract stats, share price, supply, and vault balance.
 
-Returns:
-
-```json
-{
-  "name": "Olympus REIT",
-  "symbol": "OREIT",
-  "sharePriceWei": "1000000000000000000",
-  "sharePriceEth": "1.0",
-  "totalSupplyRaw": "0",
-  "totalSupplyTokens": "0.0",
-  "maxSupplyRaw": "1000000000000000000000000",
-  "maxSupplyTokens": "1000000.0",
-  "propertyAddress": "Some property",
-  "owner": "0xFd87...",
-  "vaultBalanceWei": "0",
-  "vaultBalanceEth": "0.0",
-  "decimals": 18
-}
+#### Get User Balance
 ```
-
-Frontend uses this page for the **dashboard view**.
-
----
-
-## 3. Get Balance of User
-
+GET /public/balance/:address
 ```
-GET /public/balance/:walletAddress
+Returns token balance for a specific address.
+
+#### Get Withdrawable Rent
 ```
-
-Response:
-
-```json
-{
-  "address": "0x123...",
-  "balanceRaw": "2000000000000000000",
-  "balanceTokens": "2.0"
-}
+GET /public/withdrawable-rent/:address
 ```
+Returns pending dividend balance for a user.
 
----
-
-## 4. Withdrawable Rent (Dividends)
-
-```
-GET /public/withdrawable-rent/:walletAddress
-```
-
----
-
-## 5. Solvency Check (Vault liquidity status)
-
-```
-GET /public/check-solvency
-```
-
----
-
-# 💸 MARKET (USER – NON CUSTODIAL)
-
-These routes **do not sign transactions**.
-They only generate:
-
-```
-{ to, data, value }
-```
-
-The frontend must pass these directly into MetaMask:
-
-```js
-await window.ethereum.request({
-  method: "eth_sendTransaction",
-  params: [tx]
-})
-```
-
----
-
-## 6. Quote Buy Price
-
+#### Get Quote for Buying
 ```
 GET /market/quote-buy?amountTokens=10
 ```
+Returns the ETH cost for buying tokens.
 
-Response:
+### Transaction Builders
 
-```json
-{
-  "amountTokens": "10",
-  "amountRaw": "10000000000000000000",
-  "costWei": "50000000000000000",
-  "costEth": "0.05",
-  "sharePriceWei": "5000000000000000",
-  "sharePriceEth": "0.005"
-}
-```
-
-Use this to show the user how much ETH they need.
-
----
-
-## 7. Generate Buy Transaction
-
+#### Build Buy Transaction
 ```
 POST /tx/buy-shares
 Body: { "amountTokens": "10" }
 ```
+Returns transaction data for MetaMask.
 
-Response:
-
-```json
-{
-  "to": "0xcf93041051CF9b58764D25D1ba8A38B77FAc5B85",
-  "data": "0xabcd1234...",
-  "value": "50000000000000000",
-  "human": {
-    "amountTokens": "10",
-    "costEth": "0.05",
-    "sharePriceEth": "0.005"
-  }
-}
-```
-
-Frontend example:
-
-```js
-const tx = await axios.post("/tx/buy-shares", { amountTokens: "10" });
-await window.ethereum.request({
-  method: "eth_sendTransaction",
-  params: [tx.data]
-});
-```
-
----
-
-## 8. Generate Sell Transaction
-
+#### Build Sell Transaction
 ```
 POST /tx/sell-shares
 Body: { "amountTokens": "5" }
 ```
 
-MetaMask signs it.
-
----
-
-## 9. Generate Claim Rent Transaction
-
+#### Build Claim Rent Transaction
 ```
 POST /tx/claim-rent
 ```
 
----
+### Admin Endpoints
 
-# 🔑 ADMIN ROUTES (SERVER SIGNED)
+All admin endpoints require the `x-admin-key` header.
 
-⚠️ **Do not expose these endpoints to users.**
-A special header is needed:
-
-```
-x-admin-key: YOUR_ADMIN_API_KEY
-```
-
-The backend signs with the owner private key.
-
----
-
-## 10. Adjust Share Price (NAV update)
-
-```
-POST /admin/adjust-share-price
-Headers: { "x-admin-key": "ADMIN_API_KEY" }
-Body:
-{
-  "newPriceEth": "0.002"
-}
-```
-
----
-
-## 11. Inject Liquidity (send ETH to vault)
-
-```
-POST /admin/inject-liquidity
-Body: { "amountEth": "0.1" }
-```
-
----
-
-## 12. Distribute Rent (dividends)
-
+#### Distribute Rent
 ```
 POST /admin/distribute-rent
+Headers: { "x-admin-key": "YOUR_KEY" }
 Body: { "amountEth": "0.05" }
 ```
 
----
-
-## 13. Emergency Withdraw
-
+#### Adjust Share Price
 ```
-POST /admin/emergency-withdraw
-Body: { "amountEth": "0.1" }
+POST /admin/adjust-share-price
+Body: { "newPriceEth": "0.002" }
 ```
 
 ---
 
-# 🧩 FRONTEND REQUIREMENTS
+## 🔗 Smart Contract
 
-### The frontend must support:
+**Network:** Ethereum Sepolia Testnet
+**Contract Address:** `0xcf93041051CF9b58764D25D1ba8A38B77FAc5B85`
 
-* MetaMask connection (Sepolia)
-* Display dashboard stats (`/public/info`)
-* Calling:
+### Key Functions:
 
-  * `/tx/buy-shares`
-  * `/tx/sell-shares`
-  * `/tx/claim-rent`
-  * `/market/quote-buy`
-* Using MetaMask to sign/send transactions
-* Displaying user:
-
-  * Share balance
-  * Pending rent
-  * Portfolio value
-  * Recent actions
+- `buyShares(uint256 amountTokens)` - Purchase shares
+- `sellShares(uint256 amountTokens)` - Sell shares
+- `claimRent()` - Withdraw dividends
+- `distributeRent()` - Admin: Distribute dividends
+- `adjustSharePrice(uint256 newPrice)` - Admin: Update share price
 
 ---
 
-# 🔌 MetaMask Transaction Format
+## 🐛 Troubleshooting
 
-MetaMask expects:
+### Backend Issues
 
-```json
-{
-  "from": "0xUserWallet",
-  "to": "0xcf93...",
-  "data": "0xabc...",
-  "value": "0x123.."  // hex
-}
-```
+**Error: "Too Many Requests"**
+- Solution: The backend implements caching (30s) and request throttling. Wait a moment and try again.
 
-Convert `wei` → `hex` using:
+**Error: "Admin private key not configured"**
+- Solution: Add a valid `ADMIN_PRIVATE_KEY` to your `.env` file.
 
-```js
-value: "0x" + BigInt(costWei).toString(16)
-```
+### Frontend Issues
 
----
+**Error: "Cannot connect wallet"**
+- Solution: Install MetaMask and switch to Sepolia network.
 
-# 🗂 Folder Structure Recommendation (Frontend)
+**Error: "Insufficient funds"**
+- Solution: Get Sepolia ETH from a faucet: https://sepoliafaucet.com/
 
-```
-/api
-  reit.ts   (axios wrappers)
+**Transaction fails**
+- Check you have enough Sepolia ETH for gas fees
+- Ensure you're connected to the correct network
+- Verify the contract has sufficient liquidity for sells
 
-/hooks
-  useBalance.ts
-  useSharePrice.ts
+### Common Issues
 
-/components
-  BuyForm.tsx
-  SellForm.tsx
-  ClaimRentButton.tsx
-  DashboardCards.tsx
+**"Module not found" errors**
+- Run `npm install` in both root and frontend directories
 
-/pages
-  index.tsx
-  portfolio.tsx
-  admin.tsx (optional)
-
-```
+**Port already in use**
+- Change the PORT in `.env` files
 
 ---
 
-# 📌 Notes for Frontend Engineer
+## 🔐 Security Notes
 
-* All BUY/SELL/CLAIM actions must be performed **via MetaMask**, NOT the server
-* Only ADMIN actions are performed by backend signing
-* BigInt values must be `.toString()`'d
-* Convert wei → ETH using:
-
-  ```js
-  ethers.formatEther(value)
-  ```
-* Convert tokens → decimals using:
-
-  ```js
-  ethers.formatUnits(value, 18)
-  ```
+- Never commit `.env` files to version control
+- Never share your private keys
+- The `ADMIN_PRIVATE_KEY` should only be known to the contract owner
+- Use strong, unique API keys for production
 
 ---
-# olympus_REIT
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 👨‍💻 Developer
+
+**GitHub:** [@masab009](https://github.com/masab009)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+## 📞 Support
+
+If you encounter any issues or have questions, please open an issue on GitHub.
+
+---
+
+**Made with ❤️ for the decentralized future**
