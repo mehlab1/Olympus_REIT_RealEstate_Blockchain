@@ -1,0 +1,7 @@
+{
+  "name": "olympus-reit-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "ethers": "^6.15.0"
+  }
+}

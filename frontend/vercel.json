@@ -1,26 +1,21 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    },
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    }
+  "rewrites": [
+    { "source": "/api/public/info", "destination": "/api/public/info" },
+    { "source": "/api/public/balance/:address", "destination": "/api/public/balance/[address]" },
+    { "source": "/api/public/withdrawable-rent/:address", "destination": "/api/public/withdrawable-rent/[address]" },
+    { "source": "/api/market/quote-buy", "destination": "/api/market/quote-buy" },
+    { "source": "/api/market/quote-sell", "destination": "/api/market/quote-sell" },
+    { "source": "/api/tx/buy-shares", "destination": "/api/tx/buy-shares" },
+    { "source": "/api/tx/sell-shares", "destination": "/api/tx/sell-shares" },
+    { "source": "/api/tx/claim-rent", "destination": "/api/tx/claim-rent" },
+    { "source": "/api/admin/distribute-rent", "destination": "/api/admin/distribute-rent" },
+    { "source": "/api/admin/inject-liquidity", "destination": "/api/admin/inject-liquidity" },
+    { "source": "/api/admin/adjust-share-price", "destination": "/api/admin/adjust-share-price" },
+    { "source": "/api/admin/emergency-withdraw", "destination": "/api/admin/emergency-withdraw" }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@3"
     }
-  ]
+  }
 }
