@@ -12,10 +12,5 @@
     { "source": "/api/admin/inject-liquidity", "destination": "/api/admin/inject-liquidity" },
     { "source": "/api/admin/adjust-share-price", "destination": "/api/admin/adjust-share-price" },
     { "source": "/api/admin/emergency-withdraw", "destination": "/api/admin/emergency-withdraw" }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node@3"
-    }
-  }
+  ]
 }
