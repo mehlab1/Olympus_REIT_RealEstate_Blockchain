@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaQuestionCircle, FaTimes, FaWallet, FaChartLine, FaCoins, FaArrowRight, FaCheckCircle } from 'react-icons/fa';
+import { FaQuestionCircle, FaTimes, FaWallet, FaChartLine, FaCoins, FaCheckCircle } from 'react-icons/fa';
 
 const Guide = () => {
   const [isOpen, setIsOpen] = useState(false);
